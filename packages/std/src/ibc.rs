@@ -21,6 +21,19 @@ use crate::timestamp::Timestamp;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum IbcMsg {
+    /// Sends interchain queries to another chain.
+    /// The channel must already be established between the ibctransfer module on this chain
+    /// and a matching module on the remote chain.
+    /// We cannot select the port_id, this is whatever the local chain has bound the ibctransfer
+    /// module to.
+    Query {
+        /// exisiting channel to send the tokens over
+        channel_id: String,
+        /// abci query requests
+        requests: Vec<RequestQuery>,
+        /// when packet times out, measured on remote chain
+        timeout: IbcTimeout,
+    },
     /// Sends bank tokens owned by the contract to the given address on another chain.
     /// The channel must already be established between the ibctransfer module on this chain
     /// and a matching module on the remote chain.
@@ -49,6 +62,14 @@ pub enum IbcMsg {
     /// This will close an existing channel that is owned by this contract.
     /// Port is auto-assigned to the contract's IBC port
     CloseChannel { channel_id: String },
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct RequestQuery {
+    pub data: Binary,
+    pub path: String,
+    pub height: i64,
+    pub prove: bool,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
