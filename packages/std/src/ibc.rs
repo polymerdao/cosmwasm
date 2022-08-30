@@ -68,8 +68,8 @@ pub enum IbcMsg {
 pub struct RequestQuery {
     pub data: Binary,
     pub path: String,
-    pub height: i64,
-    pub prove: bool,
+    pub height: Option<i64>,
+    pub prove: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
