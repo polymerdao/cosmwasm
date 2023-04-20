@@ -18,6 +18,7 @@ pub const PACKET_LIFETIME: u64 = 60 * 60;
 #[entry_point]
 /// enforces ordering and versioing constraints
 pub fn ibc_channel_open(_deps: DepsMut, _env: Env, msg: IbcChannelOpenMsg) -> StdResult<()> {
+    /*
     let channel = msg.channel();
 
     if channel.order != IbcOrder::Ordered {
@@ -38,7 +39,7 @@ pub fn ibc_channel_open(_deps: DepsMut, _env: Env, msg: IbcChannelOpenMsg) -> St
             )));
         }
     }
-
+    */
     Ok(())
 }
 
@@ -57,6 +58,7 @@ pub fn ibc_channel_connect(
     let data = AccountData::default();
     accounts(deps.storage).save(channel_id.as_bytes(), &data)?;
 
+    /*
     // construct a packet to send
     let packet = PacketMsg::WhoAmI {};
     let msg = IbcMsg::SendPacket {
@@ -64,9 +66,9 @@ pub fn ibc_channel_connect(
         data: to_binary(&packet)?,
         timeout: env.block.time.plus_seconds(PACKET_LIFETIME).into(),
     };
-
+    */
     Ok(IbcBasicResponse::new()
-        .add_message(msg)
+        // .add_message(msg)
         .add_attribute("action", "ibc_connect")
         .add_attribute("channel_id", channel_id))
 }
